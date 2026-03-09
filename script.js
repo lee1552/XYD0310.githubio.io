@@ -81,27 +81,6 @@ bindMultiEvent(letterModal, 'click touchstart', (e) => {
         }, 300);
     }
 });
-// 初始化生日歌音频
-const birthdayAudio = new Audio('assets/bri.mp3'); // 请将音频文件放在assets目录下
-birthdayAudio.loop = true; // 可选：设置循环播放
-
-// 生日歌按钮点击事件
-const birthdayBtn = document.getElementById('birthdayBtn');
-birthdayBtn.addEventListener('click', function() {
-  // 切换播放/暂停状态
-  if (birthdayAudio.paused) {
-    birthdayAudio.play();
-    this.textContent = '暂停生日歌'; // 按钮文字切换
-  } else {
-    birthdayAudio.pause();
-    this.textContent = '播放生日歌';
-  }
-});
-
-// 可选：页面关闭时停止音频
-window.addEventListener('beforeunload', function() {
-  birthdayAudio.pause();
-});
 
     // 播放/暂停音乐（兼容触摸）
     bindMultiEvent(playBtn, 'click touchstart', (e) => {
@@ -115,7 +94,7 @@ window.addEventListener('beforeunload', function() {
                 playBtn.textContent = '暂停音乐 🎵';
             } else {
                 music.pause();
-                playBtn.textContent = '播放初雪 🎵';
+                playBtn.textContent = '播放生日歌 🎵';
             }
         }
     });

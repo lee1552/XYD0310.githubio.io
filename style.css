@@ -1,0 +1,495 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+    font-family: "微软雅黑", sans-serif;
+    overflow: hidden;
+    position: relative;
+}
+
+/* 星空背景 */
+.stars {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="1" fill="white" opacity="0.7"/><circle cx="80" cy="40" r="0.5" fill="white" opacity="0.5"/><circle cx="40" cy="80" r="1.2" fill="white" opacity="0.6"/></svg>');
+    background-size: 200px 200px;
+    animation: starfall 20s linear infinite;
+}
+
+@keyframes starfall {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(100vh); }
+}
+/* 信封样式 */
+.envelope {
+    position: relative;
+    width: 320px;
+    height: 200px;
+    cursor: pointer;
+    transition: transform 0.5s ease;
+    display: block;
+    user-select: none;
+    position: relative;
+    box-shadow: 0 3px 0 #e05582, 2px 2px 5px rgba(0,0,0,0.1);
+    transform: perspective(600px) rotateX(1deg);
+}
+
+.envelope:hover {
+    transform: translateY(-10px);
+}
+
+.envelope-front, .envelope-back, .envelope-flap {
+    position: absolute;
+    background: #ff6b9d;
+}
+
+.envelope-back {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px 10px 0 0;
+    background: linear-gradient(135deg, #ff7a9f 0%, #ff6b9d 100%);
+}
+
+.envelope-front {
+    width: 100%;
+    height: 50%;
+    bottom: 0;
+    border-radius: 0 0 10px 10px;
+}
+
+.envelope-flap {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    clip-path: polygon(0 0, 100% 0, 50% 50%);
+    transform-origin: top;
+    transition: transform 0.8s ease;
+    pointer-events: none; 
+}
+.envelope-line {
+    position: absolute;
+    top: 0;
+    width: 2px; /* 线条宽度 */
+    height: 100%;
+    background: #d6305c; /* 线条颜色（深粉，和爱心呼应）*/
+    z-index: 2;
+}
+
+/* 左侧斜边 */
+.envelope-line.left {
+    left: 25%; /* 线条位置，可微调 */
+    transform: skewX(60deg); /* 倾斜角度，模拟信封折痕 */
+    height: 46%; /* 线条高度，只显示下半部分 */
+    top: 0%;
+}
+
+/* 右侧斜边 */
+.envelope-line.right {
+    right: 25%; /* 线条位置，可微调 */
+    transform: skewX(-60deg); /* 倾斜角度，和左侧对称 */
+    height: 46%; /* 线条高度，只显示下半部分 */
+    top: 0%;
+}
+
+.envelope-heart {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: #ff3e6c;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    transition: all 0.5s ease;
+    z-index: 5;
+    pointer-events: none;
+    box-shadow: 2px 2px 3px rgba(0,0,0,0.2);
+}
+
+.envelope-heart::before, .envelope-heart::after {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: #ff3e6c;
+    border-radius: 50%;
+}
+
+.envelope-heart::before {
+    top: -20px;
+    left: 0;
+}
+
+.envelope-heart::after {
+    top: 0;
+    left: -20px;
+}
+.envelope-wrapper {
+  position: relative !important; /* 绝对定位的基准，缺一不可 */
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  /* 关键：取消裁剪，防止提示语被截断 */
+  overflow: visible !important;
+}
+
+/* 信封打开动画 */
+.envelope.open .envelope-flap {
+    transform: rotateX(180deg);
+}
+
+.envelope.open .envelope-heart {
+    transform: translate(-50%, -150%) rotate(45deg) scale(1.2);
+    opacity: 0;
+}
+/* 七彩流光提示语（信封下方）*/
+/* 必生效：七彩提示语（兼容微信/所有浏览器）*/
+/* 七彩提示语（必生效版） */
+.tap-hint {
+    position: absolute;
+    left: 50%;
+    bottom: -40px; /* 信封下方40px */
+    transform: translateX(-50%);
+    font-size: 0.9rem;
+    font-family: "ZCOOL KuaiLe", "YouYuan", sans-serif;
+    letter-spacing: 1.5px;
+    padding: 4px 12px;
+    /* 七彩渐变核心（兼容所有浏览器） */
+    background: linear-gradient(90deg, #ff2400, #e81d1d, #e8b71d, #33cc33, #2196f3, #9c27b0, #ff2400);
+    background-size: 600% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #ff3e6c; /* 兜底颜色 */
+    /* 流光动画 */
+    animation: rainbowFlow 3s linear infinite;
+    user-select: none;
+    cursor: pointer;
+    /* 强制显示 */
+    display: block !important;
+    opacity: 1 !important;
+    z-index: 999 !important;
+    /* 新增：过渡动画，和消失逻辑匹配 */
+    transition: opacity 0.5s ease, visibility 0.5s ease !important;
+}
+
+/* 流光动画（保留，不影响显示）*/
+@keyframes rainbowFlow {
+  0% { background-position: 0 0; }
+  100% { background-position: 100% 0; }
+}
+
+/* 贺卡内容（初始隐藏） */
+.card-content {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0;
+    visibility: hidden; /* 关键：完全隐藏，不会露出来 */
+    transition: all 0.8s ease;
+    text-align: center;
+    z-index: 10;
+    width: 90%;
+}
+
+.card-content.show {
+    opacity: 1;
+    visibility: visible; /* 打开信封才显示 */
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* 3D照片墙 */
+.photo-wall-3d {
+    perspective: 1000px;
+    margin-bottom: 80px;
+}
+
+.photo-cube {
+    width: 150px;
+    height: 150px;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: rotateCube 15s infinite linear;
+    margin: 0 auto;
+}
+
+.photo-side {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    border: 2px solid white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+.photo-side img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.front { transform: rotateY(0deg) translateZ(75px); }
+.back { transform: rotateY(180deg) translateZ(75px); }
+.right { transform: rotateY(90deg) translateZ(75px); }
+.left { transform: rotateY(-90deg) translateZ(75px); }
+.top { transform: rotateX(90deg) translateZ(75px); }
+.bottom { transform: rotateX(-90deg) translateZ(75px); }
+
+@keyframes rotateCube {
+    from { transform: rotateX(0deg) rotateY(0deg); }
+    to { transform: rotateX(360deg) rotateY(360deg); }
+}
+
+/* 祝福语样式 */
+/* 祝福语样式（可爱字体+防冲突配色）*/
+.greeting {
+    color: #ffffff; /* 白色字体，和粉色背景对比强烈 */
+    margin-bottom: 30px;
+    text-shadow: 
+        1px 1px 2px #ff3e6c, /* 粉色描边，增加可爱感 */
+        0 0 10px rgba(0,0,0,0.2); /* 轻微阴影，防止字体和背景融合 */
+    font-family: "ZCOOL KuaiLe", "YouYuan", 微软雅黑, sans-serif; /* 可爱字体优先级 */
+    letter-spacing: 2px; /* 字间距，更活泼 */
+     width: 100%; /* 宽度100%，不限制文字显示 */
+    overflow: visible; /* 强制显示全部文字，不截断 */
+    white-space: normal; /* 允许换行（但第一行足够宽就不会换）*/
+    word-wrap: break-word; /* 超长文字自动换行，不截断 */
+}
+
+.greeting h1 {
+     font-size: 1.6rem; /* 手机端字体缩小，避免超出 */
+    margin-bottom: 10px;
+    font-weight: normal;
+    width: 100%; /* 标题宽度100% */
+    overflow: visible; /* 不截断 */
+    white-space: normal; /* 允许换行（如需单行可改nowrap，但先保证显示全）*/
+}
+
+.greeting .wish {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+}
+
+.greeting .detail {
+    font-size: 0.9rem;
+    opacity: 0.95;
+}
+
+/* 大屏适配（字体放大但仍保证显示全）*/
+@media (min-width: 768px) {
+    .greeting h1 {
+        font-size: 2rem; /* 大屏适当放大 */
+        letter-spacing: 2px; /* 大屏恢复字间距 */
+    }
+    .greeting .wish {
+        font-size: 1.4rem;
+    }
+    .greeting .detail {
+        font-size: 1rem;
+    }
+}
+
+/* 按钮样式 */
+/* 按钮容器（新增：让按钮布局更灵活，间距可控）*/
+.btn-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px; /* 核心：按钮之间的间距，30px足够宽，可改40px/50px */
+    margin-top: 20px;
+}
+
+/* 按钮通用样式（全新设计）*/
+#playBtn, #letterBtn {
+    padding: 12px 28px; /* 加大内边距，按钮更饱满 */
+    border: none;
+    border-radius: 50px; /* 更大的圆角，更柔和 */
+    color: white;
+    font-size: 1rem;
+    font-weight: 500; /* 字体稍粗，更醒目 */
+    cursor: pointer;
+    transition: all 0.4s ease; /* 过渡更丝滑 */
+    box-shadow: 0 4px 15px rgba(255, 62, 92, 0.2); /* 柔和阴影 */
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap; /* 核心：强制文字不换行 */
+    min-width: 160px; /* 最小宽度，确保按钮足够容纳文字 */
+}
+
+/* 播放按钮：粉橙渐变 */
+#playBtn {
+    background: linear-gradient(135deg, #ff6b9d 0%, #ff9a9e 100%);
+}
+
+/* 信件按钮：玫红深粉渐变 */
+#letterBtn {
+    background: linear-gradient(135deg, #ff3e6c 0%, #d6305c 100%);
+}
+
+/* 按钮hover动效：放大+阴影加深+轻微上移 */
+#playBtn:hover, #letterBtn:hover {
+    transform: translateY(-3px) scale(1.05); /* 上移+轻微放大 */
+    box-shadow: 0 6px 20px rgba(255, 62, 92, 0.3); /* 阴影加深 */
+}
+
+/* 按钮点击波纹效果（可选，增加交互感）*/
+#playBtn::after, #letterBtn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+}
+
+#playBtn:active::after, #letterBtn:active::after {
+    width: 300px;
+    height: 300px;
+    opacity: 0;
+}
+
+/* 信件弹窗 */
+/* 信件弹窗背景（核心修改：适配手机顶部状态栏） */
+.letter-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    display: none;
+    justify-content: center;
+    align-items: flex-start; /* 关键：从center改为flex-start，避免顶到状态栏 */
+    z-index: 100;
+    touch-action: none;
+    overflow-y: auto;
+    /* 核心：适配刘海屏/全面屏顶部安全区，非刘海屏默认留40px */
+    padding: env(safe-area-inset-top, 40px) 0 20px 0;
+}
+
+/* 信纸容器（拆信动画+竖版尺寸，新增顶部间距） */
+.letter-container {
+    width: 70%; 
+    max-width: 260px; 
+    max-height: 60vh; 
+    position: relative;
+    margin: 20px auto !important; /* 关键：新增20px顶部外边距，避免贴顶 */
+    transform: perspective(800px) rotateX(90deg) scale(0.8);
+    opacity: 0;
+    transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* 弹窗显示时的拆信动画 */
+.letter-modal.show .letter-container {
+    transform: perspective(800px) rotateX(0) scale(1);
+    opacity: 1;
+}
+
+/* 信纸核心样式（调大顶部内边距，避免首行贴顶） */
+.letter-content {
+    width: 100%;
+    min-height: auto;
+    background: #f8f0e1;
+    background-image: 
+        linear-gradient(transparent 0, transparent 20px, #d9c8a8 20px, #d9c8a8 21px, transparent 21px),
+        url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23d9c8a8' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+    background-size: 100% 22px, 100% 100%;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15), 2px 2px 4px rgba(0,0,0,0.1);
+    padding: 35px 20px 25px; /* 关键：调大顶部内边距（从25px→35px） */
+    border: 1px solid #e6d8b8;
+    border-radius: 3px;
+    transform: perspective(500px) rotateX(2deg);
+    position: relative;
+    overflow-y: auto;
+}
+
+/* 信纸顶部折痕 */
+.letter-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 10px;
+    background: #e9d9b9;
+    border-bottom: 1px solid #d8c7a0;
+    border-radius: 3px 3px 0 0;
+}
+
+/* 关闭按钮（适配竖版） */
+.close-btn {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    font-size: 1.4rem;
+    cursor: pointer;
+    color: #8a7856;
+    -webkit-tap-highlight-color: transparent;
+    text-shadow: 0.5px 0.5px 0 rgba(255,255,255,0.8);
+    z-index: 10;
+}
+
+/* 手写文字（竖版适配） */
+.letter-text {
+    font-family: 'Ma Shan Zheng', 'STKaiti', 'KaiTi', '微软雅黑', cursive;
+    font-size: 1.1rem;
+    line-height: 22px;
+    color: #5a4b30;
+    white-space: pre-line;
+    text-shadow: 0.5px 0.5px 0 rgba(255,255,255,0.9);
+    padding-top: 2px;
+    transform: rotate(-0.5deg);
+    letter-spacing: 0.5px;
+    text-shadow: 0.5px 0.5px 0 rgba(255,255,255,0.9),
+                 0 0 1px rgba(0,0,0,0.1);
+    -webkit-font-smoothing: auto;
+}
+.letter-text::after {
+    content: '';
+    display: block;
+    clear: both;
+}
+.letter-text span.signature {
+    display: block;
+    text-align: right; /* 落款右对齐 */
+    margin-top: 10px; /* 和正文拉开距离 */
+    transform: rotate(-0.5deg); /* 同步手写倾斜 */
+}
+.letter-text .title-line {
+    display: block;
+    text-indent: 0;
+    margin-bottom: 10px;
+    margin-top: 5px; /* 兜底：给首行昵称额外留间距 */
+}
+
+/* 大屏适配（平板/电脑竖版信纸） */
+@media (min-width: 768px) {
+    .letter-container {
+        max-width: 320px;
+        max-height: 60vh;
+        margin-top: 30px !important; /* 大屏顶部间距稍大 */
+    }
+    .letter-content {
+        padding: 40px 25px 30px; /* 大屏顶部内边距同步加大 */
+        transform: perspective(500px) rotateX(1deg);
+    }
+    .letter-text {
+        font-size: 1.2rem;
+        line-height: 24px;
+    }
+}
