@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>给宝贝的生日贺卡</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- 精简字体引入：保留核心可爱字体，移除重复/冗余引入 -->
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@400;700&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 背景装饰 -->
+    <div class="stars"></div>
+    
+    <!-- 信封容器 -->
+    <div class="envelope-wrapper">
+        <div class="envelope" id="envelope">
+            <div class="envelope-front"></div>
+            <div class="envelope-back"></div>
+            <div class="envelope-line left"></div>
+            <div class="envelope-line right"></div>
+            <div class="envelope-flap"></div>
+            <div class="envelope-heart"></div>
+        </div>
+        <div class="tap-hint">请点击信封打开</div>
+    </div>
+
+    <!-- 贺卡内容（初始隐藏） -->
+    <div class="card-content" id="cardContent">
+        <!-- 3D照片墙 -->
+        <div class="photo-wall-3d">
+            <div class="photo-cube">
+                <div class="photo-side front"><img src="assets/1.jpg" alt="合照1"></div>
+                <div class="photo-side back"><img src="assets/2.jpg" alt="合照2"></div>
+                <div class="photo-side right"><img src="assets/3.jpg" alt="合照3"></div>
+                <div class="photo-side left"><img src="assets/4.jpg" alt="合照4"></div>
+                <div class="photo-side top"><img src="assets/5.jpg" alt="合照5"></div>
+                <div class="photo-side bottom"><img src="assets/6.jpg" alt="合照6"></div>
+                <!-- 原代码重复定义top/bottom，注释掉重复项（如需8张图，建议调整cube结构） -->
+                <!-- <div class="photo-side top"><img src="assets/7.jpg" alt="合照7"></div> -->
+                <!-- <div class="photo-side bottom"><img src="assets/8.jpg" alt="合照8"></div> -->
+            </div>
+        </div>
+
+        <!-- 祝福语 -->
+        <div class="greeting">
+            <h1 id="name">夏依旦宝贝~</h1>
+            <p class="wish">生日快乐 ！！🎂</p>
+            <p class="detail">愿你被世界温柔以待,永远爱你！！</p>
+        </div>
+
+        <!-- 按钮容器：合并冗余的btn-container，统一管理按钮布局 -->
+        <div class="btn-container">
+            <button id="playBtn">初雪 🎵</button>
+            <button id="letterBtn">打开我的信 ✉️</button>
+            <button id="birthdayBtn">生日歌🎵</button>
+        </div>
+    </div>
+
+    <!-- 信件弹窗（修正冗余的闭合标签） -->
+    <div class="letter-modal" id="letterModal">
+        <div class="letter-container">
+            <div class="letter-content">
+                <span class="close-btn" id="closeBtn">&times;</span>
+                <div class="letter-text">
+                    <span class="title-line">致我最爱的夏依旦宝贝，生日快乐：</span><br><br>
+                    今天是你的生日，是属于我最珍视的女孩的日子，千言万语，最想说一句：生日快乐，我最爱的宝贝，<br>
+                    宝宝，这次也是我给你过的第一个生日，希望你往后的日子都有我，都是我，你时常感慨我们的相遇是多么神奇，而我也是，我何其幸运，能在千万人之中，遇见那个心意相通、满眼是我的你。现在的我们虽隔着新疆与南京的万里山河，却有着诉不尽的相思与牵挂，这份跨越千里的缘分，我始终倍加珍惜，也始终坚信，真心能抵万难。<br>
+                    希望你喜欢这份充满回忆的礼物。<br>
+                    亲爱的女孩，生日快乐。谢谢你，出现在我的生命里，温暖了我的岁月，惊艳了我的时光。往后，不管是异地的漫长等待，还是未来的朝夕相伴，我都会一直陪着你，护着你，爱着你。愿我们，始于初见，陷于陪伴，忠于真心，跨越山海，岁岁相依，往后余生，皆是彼此，岁岁年年，永不分离。<br><br>
+                    <span class="signature">永远爱你的涟刚宝宝<br> قەدىرلىكىم<br>2026年3月10号</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 音频 -->
+    <audio id="birthdayMusic" src="assets/EXO.mp3" loop></audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
